@@ -89,7 +89,7 @@ func (m *MigMig) getRequestURL(requestURL string, baseURL string) (string, error
 
 	// if baseURL is not provided in request level, set baseURL to the default one.
 	if baseURL == "" {
-		baseURL = m.Defaults.URL
+		baseURL = m.Defaults.BaseURL
 	}
 
 	parsedURL, err := url.Parse(requestURL)
