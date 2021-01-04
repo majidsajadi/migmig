@@ -10,7 +10,6 @@ Simple HTTP Client for Golang
 * JSON Request Body
 * Creating an Instance with Default Config
 
-
 ## Usage
     
 Install MigMig using `go get`
@@ -24,6 +23,7 @@ import "github.com/majidsajadi/migmig"
 ```
 
 ### Get Request
+Simple get request
 ```go
 client := migmig.New()
 
@@ -42,23 +42,64 @@ fmt.Println(string(body))
 ```
 
 ### Post Request
+Simple post request with headers and JSOn body
 ```go
 resp, err := migmig.New().Post("https://httpbin.org/post", &migmig.Config{
+    Headers: map[string]string{
+        "Content-Type": "application/json",
+    },
     Body: map[string]interface{} {
-        "Foo": "Bar",
+        "foo": "bar",
     },
 })
+```
+
+### Creating an Instance
+You can create a migmig instance with default config
+```go
+client := migmig.Create(migmig.Config{
+    BaseURL: "https://api.github.com",
+    Headers: map[string]string{
+        "accept": "application/vnd.github.v3+json",
+    },
+})
+
+resp, err := client.Get("/users",
+    &migmig.Config{
+        QueryParams: map[string]string{
+            "per_page": "25",
+            "since":    "300",
+        },
+    })
 if err != nil {
     panic(err)
 }
 defer resp.Body.Close()
 
-body, err := ioutil.ReadAll(resp.Body)
+users, err := ioutil.ReadAll(resp.Body)
 if err != nil {
     panic(err)
 }
 
-fmt.Println(string(body))
+fmt.Println(string(users))
+
+resp, err = client.Get("/users/majidsajadi/repos",
+    &migmig.Config{
+        QueryParams: map[string]string{
+            "per_page": "25",
+        },
+    })
+if err != nil {
+    panic(err)
+}
+defer resp.Body.Close()
+
+repos, err := ioutil.ReadAll(resp.Body)
+if err != nil {
+    panic(err)
+}
+
+fmt.Println(string(repos))
 ```
 
 
@@ -69,53 +110,20 @@ resp, err := migmig.New().Get("https://httpbin.org/get", &migmig.Config{
         "foo": "bar",
     },
 })
-if err != nil {
-    panic(err)
-}
-defer resp.Body.Close()
-
-body, err := ioutil.ReadAll(resp.Body)
-if err != nil {
-    panic(err)
-}
-
-fmt.Println(string(body))
 ```
 
 ### Request Header
 ```go
-client := migmig.New()
-
-resp, err := client.Post("https://httpbin.org/post", &migmig.Config{
-    Headers: map[string]interface{} {
-        "Foo": "Bar",
+resp, err := migmig.New().Post("https://httpbin.org/post", &migmig.Config{
+    Headers: map[string]string {
+        "foo": "bar",
     },
 })
-if err != nil {
-    panic(err)
-}
-defer resp.Body.Close()
-
-body, err := ioutil.ReadAll(resp.Body)
-if err != nil {
-    panic(err)
-}
-
-fmt.Println(string(body))
 ```
 
 ### Delete Request
 ```go
 resp, err := migmig.New().Delete("https://httpbin.org/delete", nil)
-if err != nil {
-    panic(err)
-}
-defer resp.Body.Close()
-
-body, err := ioutil.ReadAll(resp.Body)
-if err != nil {
-    panic(err)
-}
 ```
 
 ### Put Request
@@ -123,44 +131,23 @@ if err != nil {
 
 resp, err := migmig.New().Put("https://httpbin.org/put", &migmig.Config{
     Body: map[string]interface{} {
-        "Foo": "Bar",
+        "foo": "bar",
     },
 })
-if err != nil {
-    panic(err)
-}
-defer resp.Body.Close()
-
-body, err := ioutil.ReadAll(resp.Body)
-if err != nil {
-    panic(err)
-}
-
-fmt.Println(string(body))
 ```
 
 ### Patch Request
 ```go
-
 resp, err := migmig.New().Patch("https://httpbin.org/patch", &migmig.Config{
     Body: map[string]interface{} {
-        "Foo": "Bar",
+        "foo": "bar",
     },
 })
-if err != nil {
-    panic(err)
-}
-defer resp.Body.Close()
-
-body, err := ioutil.ReadAll(resp.Body)
-if err != nil {
-    panic(err)
-}
-
-fmt.Println(string(body))
 ```
 
+## Contirbuting
+Any contribution, pull requests, issue and feedbacks would be greatly appreciated.
+If you have any idea about the MigMig, such as, feature requests, refactoring, API changes, etc, feel free to open an issue.
 
-
-
-
+## License 
+MigMig is open source software licensed as [MIT](LICENSE). 
