@@ -42,7 +42,7 @@ fmt.Println(string(body))
 ```
 
 ### Post Request
-Simple post request with headers and JSOn body
+Simple post request with headers and JSON body
 ```go
 resp, err := migmig.New().Post("https://httpbin.org/post", &migmig.Config{
     Headers: map[string]string{
